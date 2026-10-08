@@ -2,7 +2,7 @@
 
 Cookieless, server-side visitor statistics for [Kirby CMS](https://getkirby.com) 5.
 
-*Kizami* (刻み) is Japanese for a notch or tally mark; *kizamu* also means "to keep the beat". The plugin counts. It does not track anyone from one day to the next.
+*Kizami* (刻み) is Japanese for a notch, and also for an increment or step, as in 10分刻み ("in ten-minute increments"); *kizamu* means to notch, carve, or tick off time. That is the sense here: the plugin ticks off visits. It does not track anyone from one day to the next.
 
 - **Server-side.** Page views are counted in Kirby's `route:after` hook. Ad blockers don't affect it, and no tracking script is needed.
 - **No cookies, no browser storage, no third parties.** Nothing is stored on the visitor's device. Data stays in one SQLite file outside the web root.
