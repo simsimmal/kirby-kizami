@@ -47,6 +47,12 @@ jobs:
           - { version: '3.7.17', year: '2013', file: '3071700', sha256: '8ff46d0baa9e64c0815544e829e985f1161c096aa6344c8f430791dbeadc2baf' }
           - { version: '3.51.0', year: '2025', file: '3510000', sha256: '42e26dfdd96aa2e6b1b1be5c88b0887f9959093f650d693cb02eb9c36d146ca5' }
     steps:
+      # git before checkout: without it, actions/checkout downloads the
+      # GitHub archive instead, and that honours export-ignore — tests/
+      # would be missing.
+      - name: Install git
+        run: apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates > /dev/null
+
       - uses: actions/checkout@v4
 
       - name: Build SQLite ${{ matrix.sqlite.version }}
@@ -73,9 +79,6 @@ jobs:
           php -r 'exit(SQLite3::version()["versionString"] === getenv("EXPECTED") ? 0 : 1);' \
             || { echo "::error::PHP does not use SQLite $EXPECTED"; exit 1; }
           # The read-only database check needs a non-root user (root ignores chmod).
-          # A copy in /tmp: the runner's workspace path is not traversable for
-          # other users, so `su` would not find tests/run.sh there.
           useradd -m tester
-          cp -a . /tmp/kizami
-          chown -R tester /tmp/kizami
-          su tester -c "cd /tmp/kizami && LD_LIBRARY_PATH=$LD_LIBRARY_PATH sh tests/run.sh"
+          chown -R tester .
+          su tester -c "LD_LIBRARY_PATH=$LD_LIBRARY_PATH sh tests/run.sh"
