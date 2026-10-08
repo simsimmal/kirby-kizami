@@ -1,0 +1,24 @@
+title: Kizami report (script)
+description: Technical account for the statistics report. Cannot log in to the Panel or change anything, only read /k/report.
+
+# Account for scripts such as a daily digest (README.md). Every permission
+# is off: no Panel, no Kirby API, no pages, files or users. The only way in
+# is the route /k/report; it checks password and role itself
+# (src/ReportService.php).
+#
+# The role only exists while kizami.report is switched on.
+
+permissions:
+  access:
+    panel: false
+    site: false
+    account: false
+    users: false
+    system: false
+    languages: false
+  pages: false
+  files: false
+  site: false
+  users: false
+  user: false
+  languages: false

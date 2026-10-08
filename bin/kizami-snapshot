@@ -1,0 +1,53 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Consistent copy of the Kizami database, even while the site is writing.
+ *
+ *   php site/plugins/kizami/bin/kizami-snapshot /absolute/storage/kizami /backups/NEW.sqlite
+ *   vendor/bin/kizami-snapshot  …same arguments…
+ *
+ * Uses SQLite's online backup API (SQLite3::backup, in SQLite since 3.6.11,
+ * so also on the 3.7.17 of old hosters). The copy contains all committed
+ * transactions, including those still in the WAL — a plain file copy of
+ * kizami.sqlite would lose them or catch a half-written page. Then PRAGMA
+ * integrity_check on the copy.
+ *
+ * Unlike `maintenance.php snapshot`, this script does NOT roll anything up
+ * first: a backup should capture the data as it is.
+ *
+ * Only the database is copied, never storage/kizami/secret.txt (the daily
+ * key belongs in no backup). The target must be new and is created with
+ * 0600; an existing target is rejected.
+ *
+ * Exit code 0 = copy written and checked, 1 = error (message on stderr),
+ * 2 = wrong usage.
+ */
+if (PHP_SAPI !== 'cli') {
+    http_response_code(404);
+    exit;
+}
+
+require_once dirname(__DIR__) . '/src/Store.php';
+
+$directory = $argv[1] ?? '';
+$target = $argv[2] ?? '';
+if ($directory === '' || $target === '' || in_array($directory, ['-h', '--help'], true)) {
+    fwrite(STDERR, "Usage: kizami-snapshot STORAGE/KIZAMI NEW-FILE.sqlite\n");
+    exit(2);
+}
+
+try {
+    $db = rtrim($directory, '/') . '/' . Kizami\Store::FILE;
+    if (!is_file($db)) {
+        throw new RuntimeException("no database at $db");
+    }
+    if (file_exists($target)) {
+        throw new RuntimeException("target already exists: $target");
+    }
+    (new Kizami\Store($db))->snapshot($target);
+    clearstatcache();
+    echo "Kizami: consistent copy written, integrity_check ok: $target (" . filesize($target) . " bytes)\n";
+} catch (Throwable $e) {
+    fwrite(STDERR, 'Kizami: ' . $e->getMessage() . "\n");
+    exit(1);
+}

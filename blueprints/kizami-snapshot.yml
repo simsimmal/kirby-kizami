@@ -1,0 +1,25 @@
+title: Kizami snapshot (script)
+description: Technical account for the nightly backup. Cannot log in to the Panel or change anything, only fetch /k/snapshot.
+
+# Account for backup jobs (README.md). Every permission is off: no Panel, no
+# Kirby API, no pages, files or users. The only way in is the route
+# /k/snapshot; it checks password and role itself (src/SnapshotService.php).
+# A role of its own, because the copy contains raw events: the report
+# account must not be able to fetch it.
+#
+# The role only exists while kizami.snapshot is switched on.
+
+permissions:
+  access:
+    panel: false
+    site: false
+    account: false
+    users: false
+    system: false
+    languages: false
+  pages: false
+  files: false
+  site: false
+  users: false
+  user: false
+  languages: false

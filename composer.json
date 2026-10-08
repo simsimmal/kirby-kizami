@@ -1,0 +1,45 @@
+{
+    "name": "sayamaapps/kirby-kizami",
+    "description": "Cookieless, server-side page and link-click statistics for Kirby CMS. No JavaScript required, honours DNT/GPC, daily rotating salt, SQLite.",
+    "type": "kirby-plugin",
+    "license": "MIT",
+    "keywords": ["kirby", "kirby-plugin", "kirby-5", "analytics", "statistics", "privacy", "cookieless", "sqlite"],
+    "homepage": "https://github.com/simsimmal/kirby-kizami",
+    "authors": [
+        {
+            "name": "Simon Räder",
+            "homepage": "https://sayamaapps.de"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/simsimmal/kirby-kizami/issues",
+        "source": "https://github.com/simsimmal/kirby-kizami"
+    },
+    "require": {
+        "php": "^8.2",
+        "ext-sqlite3": "*",
+        "getkirby/composer-installer": "^1.2"
+    },
+    "require-dev": {
+        "getkirby/cms": "^5.0"
+    },
+    "bin": [
+        "bin/kizami-snapshot"
+    ],
+    "scripts": {
+        "test": "sh tests/run.sh"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "getkirby/composer-installer": true
+        },
+        "platform": {
+            "php": "8.2.0"
+        }
+    },
+    "extra": {
+        "installer-name": "kizami",
+        "kirby-cms-path": false
+    }
+}
