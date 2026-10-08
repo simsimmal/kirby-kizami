@@ -211,6 +211,32 @@ App::plugin('sayamaapps/kizami', [
     // The dashboard and report strings, also usable as t('kizami.<key>').
     'translations' => $kizamiTranslations,
 
+    /**
+     * Panel menu entry "Statistics" / "Kennzahlen" — the Panel is where
+     * people look for it (since 1.1.0).
+     *
+     * A plain link area: no view, nothing to build into the Panel bundle.
+     * Kirby's menu takes `link` and `target` straight from the area, so the
+     * entry opens the dashboard in a new tab like any external menu link.
+     * Every Panel role sees it: a logged-in Panel user already passes the
+     * dashboard's access check (kizami_access_granted()). During the build
+     * phase (`kizami.previewAccess`) the dashboard still asks for the
+     * preview login.
+     *
+     * `menu` is a closure, so switching `kizami.active` off removes the entry
+     * without a cache clear. Sites with their own `panel.menu` list must add
+     * 'kizami' to it — Kirby then shows only the listed areas.
+     */
+    'areas' => [
+        'kizami' => fn () => [
+            'label' => 'kizami.dashboard.title',
+            'icon'  => 'chart',
+            'link'  => App::instance()->url('index') . '/k/dashboard',
+            'target' => '_blank',
+            'menu'  => fn () => kizami_option('active', false) === true,
+        ],
+    ],
+
     'pageMethods' => [
         /**
          * The URL of a configured redirect, with the current page as origin

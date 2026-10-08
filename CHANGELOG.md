@@ -13,6 +13,16 @@ All notable changes to this project are documented here. Versions follow
 - The report JSON carries `format`; it increases only when a field is removed,
   renamed or changes meaning.
 
+## [1.1.0] — 2026-10-08
+
+### Added
+
+- **Panel menu entry** "Statistics" / "Kennzahlen" (chart icon) that opens
+  `/k/dashboard` in a new tab, for every Panel role, while `kizami.active` is
+  true. A plain link area, nothing is added to the Panel bundle. Sites with
+  their own `panel.menu` list add `'kizami'` to it and can drop a hand-made
+  dashboard entry.
+
 ## [1.0.0] — 2026-10-08
 
 First release as a Composer package. Before 1.0.0 the code lived as a copy

@@ -10,7 +10,7 @@ Cookieless, server-side visitor statistics for [Kirby CMS](https://getkirby.com)
 - **Daily rotating salt.** A day identifier is computed from IP address, user agent, date and a secret that is overwritten every day (Europe/Berlin). Raw IPs and user agents are never stored. Identifiers from different days can't be linked through the database.
 - **Counts what small businesses care about.** Phone calls, route requests and e-mail clicks go through counted redirects such as `/call` → `tel:…`. No JavaScript is involved, and the dashboard shows contact rates per source and landing page.
 - **Bot and crawler filtering.** User-agent filtering plus a redirect-click filter based on Fetch Metadata and the visitor's same-day page views (see [Counting rules](#counting-rules)).
-- **Dashboard** at `/k/dashboard` and a **JSON report** at `/k/report` for scripts (daily or weekly summaries).
+- **Dashboard** at `/k/dashboard`, linked from the Panel menu, and a **JSON report** at `/k/report` for scripts (daily or weekly summaries).
 - **English and German.** The dashboard and the report text follow the site's language (see `language` below).
 - **Runs on old shared hosting.** Every SQL statement works on SQLite 3.7.17, and CI runs the test suite against a real 3.7.17 build.
 
@@ -97,6 +97,8 @@ All keys are read as `kizami.<name>`, flat or nested. `null` counts as "not set"
 | `snapshotRoles` | `['kizami-snapshot']` | Roles allowed to download the snapshot. Separate from the report role on purpose: the snapshot contains raw events. |
 
 The dashboard and report strings are also registered as Kirby translations (`t('kizami.tile.visits')`).
+
+Panel menu: while `active` is true, the Panel shows an entry "Statistics" ("Kennzahlen" in German) that opens the dashboard in a new tab. If your config sets `panel.menu`, add `'kizami'` to that list; Kirby only shows listed areas then.
 
 ### Beacons
 
