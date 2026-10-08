@@ -73,6 +73,9 @@ jobs:
           php -r 'exit(SQLite3::version()["versionString"] === getenv("EXPECTED") ? 0 : 1);' \
             || { echo "::error::PHP does not use SQLite $EXPECTED"; exit 1; }
           # The read-only database check needs a non-root user (root ignores chmod).
+          # A copy in /tmp: the runner's workspace path is not traversable for
+          # other users, so `su` would not find tests/run.sh there.
           useradd -m tester
-          chown -R tester .
-          su tester -c "LD_LIBRARY_PATH=$LD_LIBRARY_PATH sh tests/run.sh"
+          cp -a . /tmp/kizami
+          chown -R tester /tmp/kizami
+          su tester -c "cd /tmp/kizami && LD_LIBRARY_PATH=$LD_LIBRARY_PATH sh tests/run.sh"
