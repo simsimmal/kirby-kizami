@@ -262,7 +262,7 @@ $table = function (array $rows, ?string $columnA = null, ?string $columnB = null
   <h3><?= $t('technical.notFound') ?></h3>
   <?php if ($data['technical']['notFound'] === []): ?><p class="empty"><?= $t('technical.noneInPeriod') ?></p><?php else: ?>
   <table><thead><tr><th scope="col"><?= $t('technical.address') ?></th><th scope="col" class="num"><?= $t('tile.pageViews') ?></th></tr></thead><tbody>
-    <?php foreach ($data['technical']['notFound'] as $n): ?><tr><td><?= $e($n['path']) ?></td><td class="num"><?= (int) $n['count'] ?></td></tr><?php endforeach; ?>
+    <?php foreach ($data['technical']['notFound'] as $row): ?><tr><td><?= $e($row['path']) ?></td><td class="num"><?= (int) $row['count'] ?></td></tr><?php endforeach; ?>
   </tbody></table>
   <?php endif; ?>
   <h3><?= $t('technical.howTitle') ?></h3>

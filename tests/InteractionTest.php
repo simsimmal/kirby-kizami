@@ -102,7 +102,8 @@ try {
     same(20, $q['Google']['visits'], 'Source names merged before computing the rate');
     same(5.0, $q['Google']['rate'], 'Rate counts visits, not clicks');
     same(null, $q['Campaign “qr”']['rate'], 'Small sample without a percentage');
-    $data=$a; ob_start(); include __DIR__.'/../views/dashboard.php'; $html=ob_get_clean();
+    // Render in its own scope: the view's loop variables must not clobber the test's globals.
+    $html = (static function (array $data): string { ob_start(); include __DIR__.'/../views/dashboard.php'; return ob_get_clean(); })($a);
     same(true, str_contains($html,'&lt;Photo&gt;') && str_contains($html,'&lt;Header&gt;') && !str_contains($html,'<Photo>'), 'New tables HTML-escaped');
     echo "Interactions: all $n checks passed\n";
 } finally {
