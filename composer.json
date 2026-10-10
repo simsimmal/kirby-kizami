@@ -40,6 +40,9 @@
     },
     "extra": {
         "installer-name": "kizami",
-        "kirby-cms-path": false
+        "kirby-cms-path": false,
+        "kirby": {
+            "compatible": "^5.0"
+        }
     }
 }
