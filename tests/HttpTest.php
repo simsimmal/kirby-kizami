@@ -31,7 +31,9 @@ function requestHttp(string $path, array $headers = [], ?array $post = null): ar
  */
 function writeConfig(array $config, string $source = ''): void {
     global $tmp;
-    file_put_contents($tmp . '/site/config/config.php', '<?php return ' . var_export($config, true) . ($source === '' ? '' : ' + [' . $source . ']') . ';');
+    $ziel = $tmp . '/site/config/config.php';
+    file_put_contents($ziel . '.tmp', '<?php return ' . var_export($config, true) . ($source === '' ? '' : ' + [' . $source . ']') . ';');
+    rename($ziel . '.tmp', $ziel); // atomar: der Testserver darf nie eine halbe Datei lesen
 }
 function rowCount(): int {
     global $tmp;
@@ -76,7 +78,7 @@ try {
     $address = stream_socket_get_name($socket, false);
     $port = (int) substr(strrchr($address, ':'), 1);
     fclose($socket);
-    $process = proc_open([PHP_BINARY, '-d', 'opcache.enable_cli=0', '-S', "127.0.0.1:$port", '-t', $tmp . '/public', $tmp . '/public/index.php'],
+    $process = proc_open([PHP_BINARY, '-d', 'opcache.enable_cli=0', '-d', 'opcache.enable=0', '-S', "127.0.0.1:$port", '-t', $tmp . '/public', $tmp . '/public/index.php'],
         [0 => ['pipe', 'r'], 1 => ['file', $tmp . '/server.log', 'a'], 2 => ['file', $tmp . '/server.log', 'a']], $pipes);
     if (!is_resource($process)) { throw new RuntimeException('Test server does not start'); }
     fclose($pipes[0]);
